@@ -12,28 +12,28 @@ def get_days_later(days):
 
 
 def get_current_time():
-  # Get the current time in Buenos Aires
+  #time in Buenos Aires
   buenos_aires_tz = pytz.timezone('America/Argentina/Buenos_Aires')
   current_time = datetime.now(tz=buenos_aires_tz)
   return current_time.strftime("%I:%M %p")
 
 
 def add_time(start_time, end_time, day=False):
-  # Rest of your code...
 
-  results = ""  # Declare the 'results' variable
 
-  # Rest of your code...
+  results = ""  
+
+
 
   current_time = get_current_time()
   print("Current time in Buenos Aires:", current_time)
 
-  # Rest of your code...
+
 
   return results.strip()
 
 
-# Example usage
+
 start_time = "10:00 AM"
 end_time = "2:30 PM"
 print(add_time(start_time, end_time, day=False))
@@ -50,7 +50,7 @@ def get_days_later(days):
 
 def add_time(start_time, end_time, day=False):
 
-  # constants
+
   HOURS_IN_ONE_DAY = 24
   HOURS_IN_HALF_DAY = 12
   WEEK_DAYS = [
@@ -68,26 +68,26 @@ def add_time(start_time, end_time, day=False):
   mins, period = mins.split(" ")
   end_time_hrs, end_time_mins = end_time.split(":")
 
-  # Clean time data
-  hours = int(hours)  # start time  hours
-  mins = int(mins)  # start time  minutes
-  end_time_hrs = int(end_time_hrs)  # end time hours
-  end_time_mins = int(end_time_mins)  # end time minutes
+
+  hours = int(hours) 
+  mins = int(mins)  
+  end_time_hrs = int(end_time_hrs)  
+  end_time_mins = int(end_time_mins)  
   period = period.strip().lower()  # AM or PM
 
-  # Combine start time and end time hrs and minutes
+
   total_mins = mins + end_time_mins
   total_hours = hours + end_time_hrs
 
-  # Shift minutes to hour if minutes is over 60
+
   if total_mins >= 60:
     total_hours += int(total_mins / 60)
     total_mins = int(total_mins % 60)
 
   if end_time_hrs or end_time_mins:
-    # If `PM`, flip period to `AM` if hours over 12
+
     if period == "pm" and total_hours > HOURS_IN_HALF_DAY:
-      # if hours over 24hr then add  days
+
       if total_hours % HOURS_IN_ONE_DAY >= 1.0:
         days_later += 1
 
@@ -95,13 +95,11 @@ def add_time(start_time, end_time, day=False):
       hours_left = total_hours / HOURS_IN_ONE_DAY
       days_later += int(hours_left)
 
-      # e.g: 54hr / 24 = 2.25 days <-- append 2 days
-      # e.g.: 36hr / 24 = 1.5 days <-- append 1 days
+
 
     temp_hours = total_hours
     while True:
-      # Constantly reverse period until
-      # total_hours are less than half a day
+
       if temp_hours < HOURS_IN_HALF_DAY:
         break
       if period == "am":
@@ -109,28 +107,23 @@ def add_time(start_time, end_time, day=False):
       else:
         period = "am"
       temp_hours -= HOURS_IN_HALF_DAY
-  """
-    Recalculate Hours and Minutes 
-    
-     Since we have already taken care of the days,
-     we now need to calculate the hours remaining.
-     This can be done by subtracting the remaining days(in hours) 
-     from the total hours remaining 
-        
-        e.g. hrs % oneday -->  55hrs % 24 = 7 ---> 7 hours remaining
-    """
+
   remaining_hours = int(total_hours % HOURS_IN_HALF_DAY) or hours + 1
   remaining_mins = int(total_mins % 60)
 
-  # Format the results
+
   results = f"{remaining_hours}:{remaining_mins:02} {period.upper()}"
-  if day:  # add the day of the week
+  if day: 
     day = day.strip().lower()
     selected_day = int((WEEK_DAYS.index(day) + days_later) % 7)
     current_day = WEEK_DAYS[selected_day]
     results += f", {current_day.title()} {get_days_later(days_later)}"
 
-  else:  # add the days later
+  else: 
+    results = " ".join((results, get_days_later(days_later)))
+
+  return results.strip()
+
     results = " ".join((results, get_days_later(days_later)))
 
   return results.strip()
